@@ -1,0 +1,78 @@
+﻿@model IEnumerable<WebAppMyper3.Models.Trabajadores>
+
+
+<div class="text-center mb-4">
+    @{
+        ViewData["Title"] = "Listado de Trabajadores";
+    }
+    <h1>Listado de Trabajadores</h1>
+</div>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" id="successAlert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Registro</a>
+</p>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <form asp-action="Index" method="get" class="form-inline">
+            <div class="input-group">
+                <label class="input-group-text" for="sexoFiltro">Filtrar por sexo:</label>
+                <select name="sexoFiltro" class="form-select" onchange="this.form.submit()">
+                    <option value="">Todos</option>
+                    <option value="M" selected='@(ViewBag.SexoFiltro == "M")'>Masculino</option>
+                    <option value="F" selected='@(ViewBag.SexoFiltro == "F")'>Femenino</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Tipo Documento</th>
+            <th>Nro Documento</th>
+            <th>Nombres</th>
+            <th>Sexo</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Distrito</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="@(item.Sexo == "M" ? "background-color: #e6f2ff;" : "background-color: #ffebf3;")">
+                <td>@Html.DisplayFor(modelItem => item.TipoDocumento)</td>
+                <td>@Html.DisplayFor(modelItem => item.NumeroDocumento)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nombres)</td>
+                <td>@(item.Sexo == "M" ? "Masculino" : "Femenino")</td>
+                <td>@Html.DisplayFor(modelItem => item.IdDepartamentoNavigation.NombreDepartamento)</td>
+                <td>@Html.DisplayFor(modelItem => item.IdProvinciaNavigation.NombreProvincia)</td>
+                <td>@Html.DisplayFor(modelItem => item.IdDistritoNavigation.NombreDistrito)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
